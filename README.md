@@ -1,4 +1,4 @@
-# netty-sebscoket-server
+# netty-webscoket-server
 
 ### 1
  修改本项目中redis的配置在工具类JredisUtils中的hostRedis

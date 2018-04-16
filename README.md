@@ -1,15 +1,13 @@
 # netty-sebscoket-server
 
->1
+### 1
  修改本项目中redis的配置在工具类JredisUtils中的hostRedis
- 
->2
+### 2
  自行解压运行  WeChatServer 
  
->3
+### 3
  把client.zip下载至本地php运行环境
- 
->4
+### 4
  发送消息体如上格式
 ```javascript
 	 var msgArray={

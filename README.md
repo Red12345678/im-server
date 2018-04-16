@@ -11,6 +11,7 @@
  
 >4
  发送消息体如上格式
+ ```script
  var msgArray={
       "fromUser":xxx,//这条消息是谁发送的
 			"fromToken":xxxx,// 这条消息发送者token token 完全自己定义，在登录时发送是聊天服务器，让聊天服务器记录你的token
@@ -19,4 +20,5 @@
 			"message":"我是消息",//
 			"type":"LOGIN" //
 		}
+```script
   其中 type 为 `LOGIN` | `MSGBODY` | `LEAVE` 分别代表 登录时发送的消息，普通的点对点消息，退出时发送的消息

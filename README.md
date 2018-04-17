@@ -16,7 +16,7 @@
 	"toUser":xxx,// 这条消息是接收者的名称
 	"toToken":xxx,// 这条消息接收者token token 完全接收者定义，在登录时接收者发送是聊天服务器，让聊天服务器记录接收者token
 	"message":"我是消息",//
-	"type":"LOGIN" //[LOGIN|MSGBODY|LEAVE]
+	"type":"LOGIN" //[LOGIN|SAY|LEAVE]
 }
 ```
-  其中 type 为 `LOGIN` | `MSGBODY` | `LEAVE` 分别代表 登录时发送的消息，普通的点对点消息，退出时发送的消息
+  其中 type 为 `LOGIN` | `SAY` | `LEAVE` 分别代表 登录时发送的消息，普通的点对点消息，退出时发送的消息

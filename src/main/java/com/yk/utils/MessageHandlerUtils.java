@@ -25,7 +25,7 @@ public class MessageHandlerUtils {
 
     private static Jedis jedis = JredisUtils.getRedisInstance();
 
-    private static String userLoginKey = "wechat:user_list";
+    private static String channelidObject = "wechat:channelid_object";
     private static String userChannelKey = "wechat:user_channelid_list";
 
     //login
@@ -33,9 +33,8 @@ public class MessageHandlerUtils {
         try {
             Map<String, String> login = new HashMap<>();
             login.put(channel.id().asLongText(), ObjectSerializeUtils.serializeObject(channel.id()));
-            jedis.hmset(userLoginKey, login);
+            jedis.hmset(channelidObject, login);
             channels.add(channel);
-            //infromAllInleave(channels, channel, MsgType.LOGIN);
         } catch (Exception e) {
             logger.info("登录失败[" + e.getMessage() + "]");
         }
@@ -52,7 +51,7 @@ public class MessageHandlerUtils {
     }
 
     public static void removeChannlid(Channel channel) {
-        jedis.hdel(userLoginKey, channel.id().asLongText());
+        jedis.hdel(channelidObject, channel.id().asLongText());
     }
 
     public static void initLogin(Channel channel, String fromToken) {
@@ -62,6 +61,7 @@ public class MessageHandlerUtils {
     }
 
     public static void leaveOpation(String fromToken) {
+
         jedis.hdel(userChannelKey, fromToken);
     }
 
@@ -69,6 +69,32 @@ public class MessageHandlerUtils {
 
     }
 
+    public static void onLogin(Message message,ChannelGroup channelGroup){
+            channelGroup.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));
+        return;
+    }
+    public static void onLeave(Message message,ChannelGroup channelGroup){
+        List<String> channelkeys = jedis.hmget(userChannelKey,message.getFromToken());
+        if (channelkeys != null && channelkeys.size()>0){
+            for (String channelkey:channelkeys)
+                if (channelkey != null ) jedis.hdel(channelidObject, channelkey);
+        }
+        channelGroup.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));
+        return;
+    }
+
+    public static void onSay(Message message,ChannelGroup channelGroup) throws Exception{
+        List<String> channelidList = jedis.hmget(userChannelKey, message.getToToken().split(","));
+        List<String> tokenList = jedis.hmget(channelidObject, channelidList.toArray(new String[0]));
+        if (tokenList != null && tokenList.size() > 0) {
+            for (String toToken : tokenList) {
+                if (toToken == null || toToken.trim().equals("")) continue;
+                ChannelId channelId = (ChannelId) (ObjectSerializeUtils.stringSerializeObject(toToken));
+                channelGroup.find(channelId).writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));
+            }
+        }
+        return;
+    }
     public static void sendMsgHandler(ChannelGroup channels, Channel channel, TextWebSocketFrame msg) {
         try {
             if (msg.text() != null && !msg.text().equals("")) {
@@ -82,33 +108,30 @@ public class MessageHandlerUtils {
                     message.setMessage(jsonObject.getString("message"));
                     message.setToUser(jsonObject.getString("toUser"));
                     message.setToToken(jsonObject.getString("toToken"));
-                    if (type.equals("LOGIN")) {
-                        initLogin(channel, jsonObject.getString("fromToken"));
-                        message.setType("LOGIN");
-                        channels.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));
-                    }
-                    if (type.equals("LEAVE") || type.equals("LOGOUT") || type.equals("OFFLINE")) {
-                        leaveOpation(jsonObject.getString("fromToken"));
-                        message.setType("LEAVE");
-                        channels.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));
-                    }
-                    if (type.equals("MSGBODY")) {
-                        message.setType("MSGBODY");
-                        List<String> channelidList = jedis.hmget(userChannelKey, message.getToToken().split(","));
-                        List<String> tokenList = jedis.hmget(userLoginKey, channelidList.toArray(new String[0]));
-                        if (tokenList != null && tokenList.size() > 0) {
-                            for (String toToken : tokenList) {
-                                ChannelId channelId = (ChannelId) (ObjectSerializeUtils.stringSerializeObject(toToken));
-                                channels.find(channelId).writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));
-                            }
-                        }
+                    switch (type){
+                        case "LOGIN":
+                            initLogin(channel, jsonObject.getString("fromToken"));
+                            message.setType("LOGIN");
+                            onLogin(message,channels);
+                            break;
+                        case "LEAVE":
+                        case "LOGOUT":
+                        case "OFFLINE":
+                            leaveOpation(message.getFromToken());
+                            message.setType("LEAVE");
+                            onLeave(message,channels);
+                            break;
+                        case "SAY":
+                            message.setType("SAY");
+                            onSay(message,channels);
+                            break;
                     }
                 }
                 return;
             }
             throw new RuntimeException(msg.text() + "[消息发失败]");
         } catch (Exception e) {
-            logger.info("发送失败[" + e.getMessage() + "]");
+            logger.info("["+e.getCause()+"]发送失败[" + e.getMessage() + "]");
         }
 
     }

@@ -25,7 +25,11 @@ public class JredisUtils {
         if (auth != null) jedis.auth(auth);
         return jedis;
     }
-
+    public static Jedis getRedisInstance(int db) {
+        jedis = getRedisInstance();
+        jedis.select(db);
+        return jedis;
+    }
     public static String getHostRedis() {
         return hostRedis;
     }

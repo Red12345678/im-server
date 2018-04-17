@@ -18,9 +18,11 @@ public class TextWebSocketFrameHandler extends
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) { // (1)
+        System.out.println(msg.text());
         MessageHandlerUtils.sendMsgHandler(channels,ctx.channel(), msg);
-
     }
+
+
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {  // (2)

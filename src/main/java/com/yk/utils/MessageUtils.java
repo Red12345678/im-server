@@ -78,7 +78,7 @@ public class MessageUtils {
         Channel c = ucMap.get(CommonUtils.getToUserChannelUK(m));
         m.setUser_name(u.getUsername());
         m.setHead_img(u.getFace());
-        m.setContent(StringEscapeUtils.escapeXml(m.getContent()));
+        m.setContent(StringEscapeUtils.escapeHtml(m.getContent()));
         if (null == c || !c.isActive()) {
             m.setStatus(MessageStatus.FAIL);
             saveMsgToDB(m);

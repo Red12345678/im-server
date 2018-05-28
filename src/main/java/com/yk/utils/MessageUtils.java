@@ -79,7 +79,7 @@ public class MessageUtils {
         m.setUser_name(u.getUsername());
         m.setHead_img(u.getFace());
         //m.setContent(StringEscapeUtils.escapeJavaScript(m.getContent()));
-        if (null == c) {
+        if (null == c || !c.isActive()) {
             m.setStatus(MessageStatus.FAIL);
             saveMsgToDB(m);
             ctx.channel().writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(m)));

@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.yk</groupId>
-    <artifactId>javanio</artifactId>
+    <artifactId>im-server</artifactId>
     <version>1.0</version>
 
     <name>javanio</name>
     <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>ws://127.0.0.1:port/</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,34 +19,45 @@
         <netty-all.version>4.1.23.Final</netty-all.version>
         <redis.version>2.9.0</redis.version>
         <fastjson.version>1.2.46</fastjson.version>
+        <log4j.version>1.2.17</log4j.version>
+        <mysql.version>6.0.2</mysql.version>
+        <common-lang.version>2.5</common-lang.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>${netty-all.version}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${redis.version}</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
         </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${common-lang.version}</version>
+        </dependency>
+
 
     </dependencies>
 

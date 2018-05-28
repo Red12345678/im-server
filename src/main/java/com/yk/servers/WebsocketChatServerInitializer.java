@@ -1,6 +1,5 @@
 package com.yk.servers;
 
-import com.yk.frames.HttpRequestHandler;
 import com.yk.frames.TextWebSocketFrameHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -12,17 +11,15 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 
 
 public class WebsocketChatServerInitializer extends
-        ChannelInitializer<SocketChannel> { //1
+        ChannelInitializer<SocketChannel> {
 
     @Override
-    public void initChannel(SocketChannel ch) throws Exception {//2
+    public void initChannel(SocketChannel ch) {
          ChannelPipeline pipeline = ch.pipeline();
-
         pipeline.addLast(new HttpServerCodec());
-        pipeline.addLast(new HttpObjectAggregator(64*1024));
+        pipeline.addLast(new HttpObjectAggregator(65536));
         pipeline.addLast(new ChunkedWriteHandler());
-        pipeline.addLast(new HttpRequestHandler("/ws"));
-        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
+        pipeline.addLast(new WebSocketServerProtocolHandler("/"));
         pipeline.addLast(new TextWebSocketFrameHandler());
 
     }

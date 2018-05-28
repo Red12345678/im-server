@@ -1,41 +1,35 @@
 package com.yk.frames;
 
-import com.yk.utils.MessageHandlerUtils;
+import com.yk.utils.MessageUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.util.concurrent.GlobalEventExecutor;
+import org.apache.log4j.Logger;
 
-import java.util.logging.Logger;
 
 public class TextWebSocketFrameHandler extends
         SimpleChannelInboundHandler<TextWebSocketFrame> {
-    private static Logger logger=Logger.getLogger(TextWebSocketFrameHandler.class.getName());
-
-    public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    private static Logger logger = Logger.getLogger(TextWebSocketFrameHandler.class);
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) { // (1)
-        System.out.println(msg.text());
-        MessageHandlerUtils.sendMsgHandler(channels,ctx.channel(), msg);
+
+        MessageUtils.msgHandler(ctx, msg);
     }
 
 
+    @Override
+    public void handlerAdded(ChannelHandlerContext ctx) {
+
+    }
 
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) {  // (2)
-        MessageHandlerUtils.loginHander(channels, ctx.channel());
-    }
-    @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) {  // (3)
-        MessageHandlerUtils.logoutHandler(channels, ctx.channel());
+    public void handlerRemoved(ChannelHandlerContext ctx) {
+
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        MessageHandlerUtils.logoutHandler(channels, ctx.channel());
         logger.info(cause.getMessage());
         ctx.close();
     }

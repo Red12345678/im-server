@@ -30,7 +30,6 @@ start)
 			echo ${RUNNAME} has started with PID $PID
 	else
 		#1>/dev/null 2>&1 &--spring.profiles.active=
-		echo -e "Use config file ${VECTORCONFIG}"
 		java  $JAVA_OPTS  -cp $CLASSPATH $VECTORMAIN $VECTORCONFIG 1>$LOGPATH 2>&1 &
 		echo -e "${RUNNAME} Started"
 	fi

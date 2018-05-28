@@ -9,11 +9,6 @@ PID=$(ps aux | grep ${RUNNAME} | grep -v grep | awk '{print $2}' )
 export CLASSPATH="$CLASSPATH:$VECTORBINDIR/lib/*"
 VECTORMAIN="com.yk.servers.ImServer"
 JAVA_OPTS="-Xms256M -Xmx512M -Xmn256M"
-if [ ! $2 = "" ]; then
-	VECTORCONFIG="--spring.profiles.active=${2}"
-	else
-	VECTORCONFIG="--spring.profiles.active=dev"
-fi
 case $1 in
 stop)
 	echo -e "Stop ${RUNNAME}...."

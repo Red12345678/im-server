@@ -53,13 +53,11 @@ public class ImServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 7272;
+        int port;
         String file = "conf.properties";
-        if (args.length > 0) {
-            port = Integer.parseInt(args[0]);
-            file = args[1];
-        }
+        if (args.length > 0)  file = args[0];
         initConfFile(file);
+        port = Integer.parseInt(conf.getProperty("im.server.port","7272"));
         new ImServer(port).imServerStart();
 
     }

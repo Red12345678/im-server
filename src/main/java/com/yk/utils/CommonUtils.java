@@ -22,6 +22,12 @@ public class CommonUtils {
         return md5(prefix + m.getTouid());
     }
 
+    public static String htmlspecialchars(String s){
+
+        s = s.replaceAll(">","&gt;");
+        s = s.replaceAll("<","&lt;");
+        return s;
+    }
     public static String md5(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("md5");

@@ -6,7 +6,6 @@ import com.yk.entities.User;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 import java.util.Map;
@@ -78,7 +77,7 @@ public class MessageUtils {
         Channel c = ucMap.get(CommonUtils.getToUserChannelUK(m));
         m.setUser_name(u.getUsername());
         m.setHead_img(u.getFace());
-        m.setContent(StringEscapeUtils.escapeHtml(m.getContent()));
+        m.setContent(CommonUtils.htmlspecialchars(m.getContent()));
         if (null == c || !c.isActive()) {
             m.setStatus(MessageStatus.FAIL);
             saveMsgToDB(m);

@@ -16,14 +16,16 @@ import java.util.Properties;
 public class ImServer {
 
     private int port;
-    private static Logger logger = Logger.getLogger(ImServer.class);
-    public static Properties conf = new Properties();
+    private static Logger     logger = Logger.getLogger(ImServer.class);
+    public static  Properties conf   = new Properties();
+
     public ImServer(int port) {
         this.port = port;
     }
+
     public void imServerStart() throws Exception {
 
-        EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
+        EventLoopGroup bossGroup   = new NioEventLoopGroup(); // (1)
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap(); // (2)
@@ -53,11 +55,11 @@ public class ImServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port;
+        int    port;
         String file = "conf.properties";
-        if (args.length > 0)  file = args[0];
+        if (args.length > 0) file = args[0];
         initConfFile(file);
-        port = Integer.parseInt(conf.getProperty("im.server.port","7272"));
+        port = Integer.parseInt(conf.getProperty("im.server.port", "7272"));
         new ImServer(port).imServerStart();
 
     }

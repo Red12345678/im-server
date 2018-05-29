@@ -22,20 +22,21 @@ public class CommonUtils {
         return md5(prefix + m.getTouid());
     }
 
-    public static String htmlspecialchars(String s){
+    public static String htmlspecialchars(String s) {
 
-        s = s.replaceAll(">","&gt;");
-        s = s.replaceAll("<","&lt;");
+        s = s.replaceAll(">", "&gt;");
+        s = s.replaceAll("<", "&lt;");
         return s;
     }
+
     public static String md5(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("md5");
-            byte[] result = digest.digest(password.getBytes());
+            byte[]        result = digest.digest(password.getBytes());
             StringBuilder buffer = new StringBuilder();
             for (byte b : result) {
-                int number = b & 0xff;// 加盐
-                String str = Integer.toHexString(number);
+                int    number = b & 0xff;// 加盐
+                String str    = Integer.toHexString(number);
                 if (str.length() == 1) {
                     buffer.append("0");
                 }

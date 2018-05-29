@@ -9,13 +9,13 @@ import com.yk.utils.TimeUtil;
  * @author yangkun[Email:vectormail@163.com] 2018/4/16
  */
 public class Message {
-    private String user_name;
+    private String  user_name;
     private Integer uid;
     private Integer touid;
-    private String touname;
-    private String room_id;
-    private String type;
-    private String content;
+    private String  touname;
+    private String  room_id;
+    private String  type;
+    private String  content;
     private String inputtime = TimeUtil.getCurrentDateString();
     private String stype;
     private String role = "s";

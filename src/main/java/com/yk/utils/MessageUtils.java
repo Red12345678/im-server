@@ -3,13 +3,13 @@ package com.yk.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.yk.entities.Message;
 import com.yk.entities.User;
+import com.yk.servers.ChannelServer;
+import com.yk.servers.MessageServer;
+import com.yk.servers.UserServer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.apache.log4j.Logger;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -19,11 +19,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MessageUtils {
     private static Logger logger = Logger.getLogger(MessageUtils.class);
-    private static Map<String, Channel> ucMap = new ConcurrentHashMap<>();
+
+    private static UserServer    us = new UserServer();
+    private static MessageServer ms = new MessageServer();
+    private static ChannelServer cs = new ChannelServer();
 
     //login
     public static void loginHander(ChannelHandlerContext ctx, Message m) {
-        ucMap.put(CommonUtils.getUserChannelUK(m), ctx.channel());
+        logger.info("loginHander => " + m);
+        cs.userJoin(ctx, m);
     }
 
     /**
@@ -34,7 +38,6 @@ public class MessageUtils {
      * @author yangkun[Email:vectormail@163.com] 2018/5/28
      */
     public static void msgHandler(ChannelHandlerContext ctx, TextWebSocketFrame msg) {
-        logger.info("loginHander => " + msg.text());
         Message m = JSONObject.parseObject(msg.text(), Message.class);
         if (null == m) return;
         switch (m.getType().toLowerCase()) {
@@ -53,31 +56,52 @@ public class MessageUtils {
         }
     }
 
+    public static void groupChatHandler(ChannelHandlerContext ctx, Message m) {
+        logger.info("sayHandler => " + m);
+        Channel c = cs.roomChannel(ctx, m);
+        if (null == c || !c.isActive()) {
+            m.setStatus(MessageStatus.FAIL);
+
+        } else {
+            m.setStatus(MessageStatus.SUCCESS);
+        }
+        saveMsgToDB(m);
+        return;
+    }
+
     public static void logoutHandler(ChannelHandlerContext ctx, Message m) {
-        ucMap.remove(CommonUtils.getUserChannelUK(m));
+        cs.userLogout(m);
+        logger.info("logoutHandler => " + m);
     }
 
     /**
      * [描述： save to DB]
-     * @author yangkun[Email:vectormail@163.com] 2018/5/28
+     *
      * @param m
+     * @author yangkun[Email:vectormail@163.com] 2018/5/28
      */
     public static void saveMsgToDB(Message m) {
-        MysqlUtils.insertMsgToDB(m);
+        ms.insertMsgToDB(m);
     }
 
     /**
      * [描述： 发送消息处理]
-     * @author yangkun[Email:vectormail@163.com] 2018/5/28
+     *
      * @param ctx
      * @param m
+     * @author yangkun[Email:vectormail@163.com] 2018/5/28
      */
     public static void sayHandler(ChannelHandlerContext ctx, Message m) {
-        User u = MysqlUtils.getUserInfo(m);
-        Channel c = ucMap.get(CommonUtils.getToUserChannelUK(m));
+        logger.info("sayHandler => " + m);
+        User u = us.getUserInfo(m);
         m.setUser_name(u.getUsername());
         m.setHead_img(u.getFace());
         m.setContent(CommonUtils.htmlspecialchars(m.getContent()));
+        if (null != m.getRoom_id()) {
+            groupChatHandler(ctx, m);
+            return;
+        }
+        Channel c = cs.getChannel(m);
         if (null == c || !c.isActive()) {
             m.setStatus(MessageStatus.FAIL);
             saveMsgToDB(m);
@@ -93,5 +117,6 @@ public class MessageUtils {
     public static void pingHandler(ChannelHandlerContext ctx, Message m) {
 
     }
+
 
 }

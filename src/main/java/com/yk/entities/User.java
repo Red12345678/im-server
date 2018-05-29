@@ -1,15 +1,17 @@
 package com.yk.entities;
 
+import java.io.Serializable;
+
 /**
  * [com.yk.entities desc]
  *
  * @author yangkun[Email:vectormail@163.com] 2018/5/28
  */
-public class User {
+public class User implements Serializable{
 
     private Integer id;
-    private String username;
-    private String face;
+    private String  username;
+    private String  face;
 
     public Integer getId() {
         return id;
@@ -35,12 +37,4 @@ public class User {
         this.face = face;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", face='" + face + '\'' +
-                '}';
-    }
 }

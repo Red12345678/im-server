@@ -1,22 +1,117 @@
-# netty-webscoket-server
+# im-server
 
-### 1
- 修改本项目中redis的配置在工具类JredisUtils中的hostRedis
-### 2
- 自行解压运行  WeChatServer 
+### step 1
+  此服务是java开发需要安装jdk,meaven 并将其加入环境变量<br>
+  修改本项目中conf.properties
+  在项目目录下执行 `sh initServer.sh `<br>
+  然后启动执行 `sh imServer.sh start`<br>
+  停止服务请执行 `sh imServer.sh stop`  <br>
+  第一次运行时必须先执行 `sh initServer.sh `，以后可以不执行
+```
+#scocket 监听端口
+im.server.port=7272 
+#不要动
+#im.client.num=3
+#这是redis配置用缓存已经从数据库中取到的数据 开启redis可以提高响应速度
+im.redis.host=192.168.3.201
+#redis端口
+im.redis.port=6379
+#redis访问密码
+im.redis.auth=
+#使用redis中的哪个数据库
+im.redis.default.db=1
+#数据存放在redis个的集合名称
+im.redis.user.cache.table=im:users
+#jdbc连接数据库的配置 
+jdbc.host=jdbc:mysql://localhost:3306/handan?characterEncoding=utf8&useSSL=false
+#数据库用户名
+jdbc.username=root
+#数据库密码
+jdbc.password=
+#jdbc驱动
+jdbc.driver=com.mysql.cj.jdbc.Driver
+#如果是一个表来保存所有平台用户的话请 jdbc.s.user.info.sql 
+#和 jdbc.t.user.info.sql 配置一样就行 jdbc.s.user.info.sql
+#与jdbc.t.user.info.sql 设计为了后台用户与前台用户通信用的
+jdbc.s.user.info.sql=SELECT id,user_name as username,head_img as face FROM hd_user WHERE id = %s
+jdbc.t.user.info.sql=SELECT mid as id ,name as username,head_img as face FROM hd_analyst WHERE mid = %s
+#发送的消息保存到数据库中的sql
+jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
+  (`user_name`,`uid`,`touid`,`touname`,`room_id`,`content`,`type`,`stype`,`inputtime`,`role`,`head_img`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+  ```
  
-### 3
- 把client.zip下载至本地php运行环境
-### 4
- 发送消息体如上格式
-```javascript
-	 var msgArray={
-	 "fromUser":xxx,//这条消息是谁发送的
-	"fromToken":xxxx,// 这条消息发送者token token 完全自己定义，在登录时发送是聊天服务器，让聊天服务器记录你的token
-	"toUser":xxx,// 这条消息是接收者的名称
-	"toToken":xxx,// 这条消息接收者token token 完全接收者定义，在登录时接收者发送是聊天服务器，让聊天服务器记录接收者token
-	"message":"我是消息",//
-	"type":"LOGIN" //[LOGIN|SAY|LEAVE]
+### step 2
+ 发送消息体如上格式如下
+ 
+>1 登录时发送
+```json
+{
+"uid":"1474", 
+"touid":"117",
+"role":"s", 
+"type":"login"
 }
 ```
-  其中 type 为 `LOGIN` | `SAY` | `LEAVE` 分别代表 登录时发送的消息，普通的点对点消息，退出时发送的消息
+`uid` 当前用户id <br>
+`touid`接收者用户id <br>
+`role`当前用户角色 s=>普通用户,t=>后台用户，如果一个表存放所有用户的话就固定s<br>
+`type` 消息类型 [login|say|logout]
+
+>2发送实时消息
+```json
+{
+"uid":"1474",
+"touid":"117",
+"role":"s",
+"type":"say",
+"content":"hello",
+"stype":"0"
+}
+```
+`uid` 当前用户id <br>
+`touid`接收者用户id <br>
+`role`当前用户角色 s=>普通用户,t=>后台用户，如果一个表存放所有用户的话就固定s<br>
+`content` 发送的内容<br>
+`type` 消息类型 [login|say|logout]
+`stype` 此参数保留，im-server不进行逻辑参与，可以随便给值
+
+>3退出时发送消息
+```json
+{
+"uid":"1474", 
+"touid":"117",
+"role":"s", 
+"type":"logout"
+}
+```
+`uid` 当前用户id <br>
+`touid`接收者用户id <br>
+`role`当前用户角色 s=>普通用户,t=>后台用户，如果一个表存放所有用户的话就固定s<br>
+`type` 消息类型 [login|say|logout]
+
+>4接收到的消息体
+```json
+{
+"content":"HELLO",
+"head_img":"/Public/home/pic/tou2.jpg",
+"inputtime":"2018-06-07 10:21:23",
+"role":"t",
+"status":"SUCCESS",
+"stype":"0",
+"touid":1474,
+"type":"say",
+"uid":117,
+"user_name":"何老师"
+}
+```
+`content` 发送的内容<br>
+`head_img` 发送者的头像<br>
+`inputtime`发送时间<br>
+`status` 消息状态 [SUCCESS|FAIL]<br>
+`uid` 发送者的用户id <br>
+`touid`接收者用户id <br>
+`user_name` 发送者的用户名
+`role`当前用户角色 s=>普通用户,t=>后台用户，如果一个表存放所有用户的话就固定s<br>
+`type` 消息类型 [login|say|logout]
+
+

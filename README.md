@@ -16,7 +16,11 @@ im-server 1.0.1底层使用netty框架做websocket通信，其主要特性包括
   在项目目录下执行 `sh initServer.sh `<br>
   然后启动执行 `sh imServer.sh start`<br>
   停止服务请执行 `sh imServer.sh stop`  <br>
-  第一次运行时必须先执行 `sh initServer.sh `，以后可以不执行
+  第一次运行时必须先执行 `sh initServer.sh `，以后可以不执行<br>
+  如果有需要修改jvm一些参数的话可以`vim imServer.sh` <br>
+  ```python
+     JAVA_OPTS="-Xms256M -Xmx512M -Xmn256M"
+  ```
 ```
 #scocket 监听端口
 im.server.port=7272 
@@ -55,12 +59,12 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
  
 >1 登录时发送
 ```json
-{
-"uid":"1474", 
-"touid":"117",
-"role":"s", 
-"type":"login"
-}
+    {
+    "uid":"1474", 
+    "touid":"117",
+    "role":"s", 
+    "type":"login"
+    }
 ```
 `uid` 当前用户id <br>
 `touid`接收者用户id <br>
@@ -69,14 +73,14 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 
 >2发送实时消息
 ```json
-{
-"uid":"1474",
-"touid":"117",
-"role":"s",
-"type":"say",
-"content":"hello",
-"stype":"0"
-}
+    {
+    "uid":"1474",
+    "touid":"117",
+    "role":"s",
+    "type":"say",
+    "content":"hello",
+    "stype":"0"
+    }
 ```
 `uid` 当前用户id <br>
 `touid`接收者用户id <br>
@@ -88,10 +92,10 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 >3退出时发送消息
 ```json
 {
-"uid":"1474", 
-"touid":"117",
-"role":"s", 
-"type":"logout"
+    "uid":"1474", 
+    "touid":"117",
+    "role":"s", 
+    "type":"logout"
 }
 ```
 `uid` 当前用户id <br>
@@ -102,16 +106,16 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 >4接收到的消息体
 ```json
 {
-"content":"HELLO",
-"head_img":"/Public/home/pic/tou2.jpg",
-"inputtime":"2018-06-07 10:21:23",
-"role":"t",
-"status":"SUCCESS",
-"stype":"0",
-"touid":1474,
-"type":"say",
-"uid":117,
-"user_name":"何老师"
+    "content":"HELLO",
+    "head_img":"/Public/home/pic/tou2.jpg",
+    "inputtime":"2018-06-07 10:21:23",
+    "role":"t",
+    "status":"SUCCESS",
+    "stype":"0",
+    "touid":1474,
+    "type":"say",
+    "uid":117,
+    "user_name":"何老师"
 }
 ```
 `content` 发送的内容<br>

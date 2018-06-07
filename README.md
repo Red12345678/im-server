@@ -123,10 +123,10 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 `role`当前用户角色 s=>普通用户,t=>后台用户，如果一个表存放所有用户的话就固定s<br>
 `type` 消息类型 [login|say|logout]
 
+
 ###step 3
 查看服务是否启动 在项目目录下执行 jps 会看如下效果
 ![view](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189e28c9521.png)
-#在一项目中使用效果
-![user](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189caa7b570.png)
-![admin](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189d583a274.png)
+### 在一项目中使用效果
+![user](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189caa7b570.png)![admin](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189d583a274.png)
 

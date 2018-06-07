@@ -5,6 +5,7 @@ im-server 1.0.1底层使用netty框架做websocket通信，其主要特性包括
 
  + NIO支持更大连接数
  + Redis缓存数据提高响应速度
+ + 点对点即时通信
  + 历史消息自定义sql存储
  + 用户信息多表支持及自定义sql获取用户信息
 
@@ -124,7 +125,7 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 `type` 消息类型 [login|say|logout]
 
 
-###step 3
+### step 3
    查看服务是否启动 在项目目录下执行 jps 会看如下效果<br>
 ![view](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189e28c9521.png)
 ### 在一项目中使用效果<br>

@@ -125,7 +125,7 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 
 
 ###step 3
-查看服务是否启动 在项目目录下执行 jps 会看如下效果
+   查看服务是否启动 在项目目录下执行 jps 会看如下效果<br>
 ![view](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189e28c9521.png)
 ### 在一项目中使用效果<br>
 ![user](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189caa7b570.png)

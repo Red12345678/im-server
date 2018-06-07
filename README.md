@@ -32,7 +32,7 @@ im.redis.default.db=1
 #数据存放在redis个的集合名称
 im.redis.user.cache.table=im:users
 #jdbc连接数据库的配置 
-jdbc.host=jdbc:mysql://localhost:3306/handan?characterEncoding=utf8&useSSL=false
+jdbc.host=jdbc:mysql://localhost:3306/yangkun?characterEncoding=utf8&useSSL=false
 #数据库用户名
 jdbc.username=root
 #数据库密码

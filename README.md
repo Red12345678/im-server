@@ -8,9 +8,9 @@ im-server 1.0.1底层使用netty框架做websocket通信，其主要特性包括
  + 历史消息自定义sql存储
  + 用户信息多表支持及自定义sql获取用户信息
 
-> ThinkPHP5的运行环境要求PHP5.6以上。
+> im-server 1.0.1的运行环境要求jdk8以上，Maven项目管理工具。
 ### step 1
-  此服务是java开发需要安装jdk,meaven 并将其加入环境变量<br>
+  此服务是java开发需要安装Jdk,Maven 并将其加入环境变量<br>
   修改本项目中conf.properties
   在项目目录下执行 `sh initServer.sh `<br>
   然后启动执行 `sh imServer.sh start`<br>

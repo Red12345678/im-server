@@ -124,3 +124,5 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 `type` 消息类型 [login|say|logout]
 
 
+#在一项目中使用效果
+![user](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189caa7b570.png)![admin](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189d583a274.png)

@@ -6,9 +6,9 @@
 
     <groupId>com.yk</groupId>
     <artifactId>im-server</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
-    <name>javanio</name>
+    <name>im-server</name>
     <!-- FIXME change it to the project's website -->
     <url>ws://127.0.0.1:port/</url>
 

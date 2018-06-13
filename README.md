@@ -19,10 +19,11 @@ im-server 1.0.1底层使用netty框架做websocket通信，其主要特性包括
   停止服务请执行 `sh imServer.sh stop`  <br>
   第一次运行时必须先执行 `sh initServer.sh `，以后可以不执行<br>
   如果有需要修改jvm一些参数的话可以`vim imServer.sh` <br>
-  ```python
+  ```bash
      JAVA_OPTS="-Xms256M -Xmx512M -Xmn256M"
   ```
-```
+```properties
+
 #scocket 监听端口
 im.server.port=7272 
 #不要动
@@ -53,6 +54,7 @@ jdbc.t.user.info.sql=SELECT mid as id ,name as username,head_img as face FROM hd
 #发送的消息保存到数据库中的sql
 jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
   (`user_name`,`uid`,`touid`,`touname`,`room_id`,`content`,`type`,`stype`,`inputtime`,`role`,`head_img`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+  
   ```
  
 ### step 2

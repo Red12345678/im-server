@@ -26,10 +26,7 @@ public class CommonUtils {
     }
 
     public static String htmlspecialchars(String s) {
-
-        s = s.replaceAll(">", "&gt;");
-        s = s.replaceAll("<", "&lt;");
-        return s;
+        return s.replaceAll(">", "&gt;").replaceAll("<", "&lt;");
     }
 
     public static String md5(String password) {

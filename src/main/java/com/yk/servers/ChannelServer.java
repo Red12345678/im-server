@@ -49,8 +49,8 @@ public interface ChannelServer {
     /**
      * [描述： desc]
      *
-     * @param m
-     * @param from
+     * @param uid int
+     * @param from boolean
      * @return
      * @author yangkun[Email:vectormail@163.com] 2018/7/2
      */

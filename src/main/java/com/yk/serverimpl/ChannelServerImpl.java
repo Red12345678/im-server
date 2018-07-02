@@ -35,12 +35,12 @@ public class ChannelServerImpl implements ChannelServer {
      */
     @Override
     public void userJoin(ChannelHandlerContext ctx, Message m) {
-        String key = CommonUtils.getKey(m.getUid(), m.getRole(), true);
-        ChannelGroup cg = ucMap.get(key);
-        int          s  = Integer.valueOf(ImServer.conf.getProperty("im.client.num", "3"));
+        String       key = CommonUtils.getKey(m.getUid(), m.getRole(), true);
+        ChannelGroup cg  = ucMap.get(key);
+        int          s   = Integer.valueOf(ImServer.conf.getProperty("im.client.num", "3"));
         if (cg != null) {
             if (cg.size() > s) {
-                ucMap.get(key).forEach((c) -> {
+                ucMap.get(key).forEach(c -> {
                     if (!c.isActive()) ucMap.get(key).remove(c);
                 });
             }
@@ -84,6 +84,7 @@ public class ChannelServerImpl implements ChannelServer {
     public ChannelGroup getChannelGroup(int uid, String role, boolean from) {
         ChannelGroup ch;
         ch = ucMap.get(CommonUtils.getKey(uid, role, from));
+        ch.forEach(c -> {if (!c.isActive()) ch.remove(c);});
         logger.info("ChannelServer getchannelGroup=>" + ch);
         return ch;
     }

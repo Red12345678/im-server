@@ -78,7 +78,7 @@ public class MessageUtils {
     public static void groupChatHandler(ChannelHandlerContext ctx, Message m) {
         if (null == m.getRoom_id() || m.getRoom_id().equals("")) return;
         List<RoomUser> l = rs.findRoomById(m.getRoom_id());
-        l.forEach((r) -> send(m,
+        l.forEach(r -> send(m,
                 cs.getChannelGroup(m.getUid(), m.getRole(), true),
                 cs.getChannelGroup(r.getUserId(), r.getRole(), false)));
         logger.info("groupChatHandler => " + m);

@@ -4,7 +4,6 @@ import com.yk.entities.Message;
 import com.yk.im.ImServer;
 import com.yk.servers.ChannelServer;
 import com.yk.utils.CommonUtils;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;

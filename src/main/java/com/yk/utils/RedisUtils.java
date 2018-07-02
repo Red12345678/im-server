@@ -1,6 +1,7 @@
 package com.yk.utils;
 
-import com.yk.servers.ImServer;
+
+import com.yk.im.ImServer;
 import redis.clients.jedis.Jedis;
 
 public class RedisUtils {

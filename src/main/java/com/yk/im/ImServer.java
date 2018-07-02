@@ -1,5 +1,6 @@
-package com.yk.servers;
+package com.yk.im;
 
+import com.yk.frames.WebsocketChatServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -34,7 +35,7 @@ public class ImServer {
                     .childHandler(new WebsocketChatServerInitializer())  //(4)
                     .option(ChannelOption.SO_BACKLOG, 128)          // (5)
                     .childOption(ChannelOption.SO_KEEPALIVE, true); // (6)
-            logger.info("WebsocketServer has started and listen in port " + port);
+            logger.info("ImServer has started and listen in port " + port);
             ChannelFuture f = b.bind(port).sync(); // (7)
             f.channel().closeFuture().sync();
         } finally {

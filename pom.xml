@@ -6,7 +6,7 @@
 
     <groupId>com.yk</groupId>
     <artifactId>im-server</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <name>im-server</name>
     <!-- FIXME change it to the project's website -->
@@ -87,7 +87,7 @@
                         <manifest>
                             <!--change addClasspath to true if daks is desktop version -->
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.yk.servers.ImServer</mainClass>
+                            <mainClass>com.yk.im.ImServer</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>

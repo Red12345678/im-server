@@ -7,7 +7,7 @@ VECTORCONFIG=""
 LOGPATH="/dev/null"
 PID=$(ps aux | grep ${RUNNAME} | grep -v grep | awk '{print $2}' )
 export CLASSPATH="$CLASSPATH:$VECTORBINDIR/lib/*"
-VECTORMAIN="com.yk.servers.ImServer"
+VECTORMAIN="com.yk.im.ImServer"
 JAVA_OPTS="-Xms256M -Xmx512M -Xmn256M"
 case $1 in
 stop)

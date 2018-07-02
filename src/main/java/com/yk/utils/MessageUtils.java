@@ -2,14 +2,22 @@ package com.yk.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yk.entities.Message;
+import com.yk.entities.RoomUser;
 import com.yk.entities.User;
+import com.yk.serverimpl.ChannelServerImpl;
+import com.yk.serverimpl.MessageServerImpl;
+import com.yk.serverimpl.RoomServerImpl;
+import com.yk.serverimpl.UserServerImpl;
 import com.yk.servers.ChannelServer;
 import com.yk.servers.MessageServer;
+import com.yk.servers.RoomServer;
 import com.yk.servers.UserServer;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 
 /**
@@ -20,9 +28,10 @@ import org.apache.log4j.Logger;
 public class MessageUtils {
     private static Logger logger = Logger.getLogger(MessageUtils.class);
 
-    private static UserServer    us = new UserServer();
-    private static MessageServer ms = new MessageServer();
-    private static ChannelServer cs = new ChannelServer();
+    private static UserServer    us = new UserServerImpl();
+    private static MessageServer ms = new MessageServerImpl();
+    private static ChannelServer cs = new ChannelServerImpl();
+    private static RoomServer    rs = new RoomServerImpl();
 
     //login
     public static void loginHander(ChannelHandlerContext ctx, Message m) {
@@ -50,27 +59,40 @@ public class MessageUtils {
             case "logout":
                 logoutHandler(ctx, m);
                 break;
+            case "group":
+                groupChatHandler(ctx, m);
+                break;
             case "ping":
                 pingHandler(ctx, m);
                 break;
         }
     }
 
+    /**
+     * [描述： Group chat]
+     *
+     * @param ctx
+     * @param m
+     * @author yangkun[Email:vectormail@163.com] 2018/7/2
+     */
     public static void groupChatHandler(ChannelHandlerContext ctx, Message m) {
-        logger.info("sayHandler => " + m);
-        Channel c = cs.roomChannel(ctx, m);
-        if (null == c || !c.isActive()) {
-            m.setStatus(MessageStatus.FAIL);
-
-        } else {
-            m.setStatus(MessageStatus.SUCCESS);
-        }
-        saveMsgToDB(m);
-        return;
+        if (null == m.getRoom_id() || m.getRoom_id().equals("")) return;
+        List<RoomUser> l = rs.findRoomById(m.getRoom_id());
+        l.forEach((r) -> send(m,
+                cs.getChannelGroup(m.getUid(), m.getRole(), true),
+                cs.getChannelGroup(r.getUserId(), r.getRole(), false)));
+        logger.info("groupChatHandler => " + m);
     }
 
+    /**
+     * [描述： logout]
+     *
+     * @param ctx
+     * @param m
+     * @author yangkun[Email:vectormail@163.com] 2018/7/2
+     */
     public static void logoutHandler(ChannelHandlerContext ctx, Message m) {
-        cs.userLogout(m);
+        cs.userLogout(ctx, m);
         logger.info("logoutHandler => " + m);
     }
 
@@ -92,31 +114,41 @@ public class MessageUtils {
      * @author yangkun[Email:vectormail@163.com] 2018/5/28
      */
     public static void sayHandler(ChannelHandlerContext ctx, Message m) {
-        logger.info("sayHandler => " + m);
+        ChannelGroup cgTo   = cs.getChannelGroup(m.getTouid(), m.getRole(), false);
+        ChannelGroup cgFrom = cs.getChannelGroup(m.getUid(), m.getRole(), true);
+        send(m, cgFrom, cgTo);
+
+    }
+
+
+    /**
+     * [描述： start send messages]
+     *
+     * @param m
+     * @param cgFrom
+     * @param cgTo
+     * @author yangkun[Email:vectormail@163.com] 2018/7/2
+     */
+    public static void send(Message m, ChannelGroup cgFrom, ChannelGroup cgTo) {
         User u = us.getUserInfo(m);
         m.setUser_name(u.getUsername());
         m.setHead_img(u.getFace());
         m.setContent(CommonUtils.htmlspecialchars(m.getContent()));
-        if (null != m.getRoom_id()) {
-            groupChatHandler(ctx, m);
-            return;
-        }
-        Channel c = cs.getChannel(m);
-        if (null == c || !c.isActive()) {
+        logger.info("send msg => " + m);
+        if (null == cgTo || cgTo.size() <= 0) {
             m.setStatus(MessageStatus.FAIL);
             saveMsgToDB(m);
-            ctx.channel().writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(m)));
+            cgFrom.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(m)));
             return;
         }
         m.setStatus(MessageStatus.SUCCESS);
-        c.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(m)));
-        ctx.channel().writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(m)));
+        cgTo.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(m)));
+        cgFrom.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(m)));
         saveMsgToDB(m);
-    }
-
-    public static void pingHandler(ChannelHandlerContext ctx, Message m) {
 
     }
+
+    public static void pingHandler(ChannelHandlerContext ctx, Message m) { }
 
 
 }

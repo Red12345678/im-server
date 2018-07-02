@@ -1,11 +1,12 @@
-Im-server 1.0.1
+Im-server 1.0.2
 ===============
 
-im-server 1.0.1底层使用netty框架做websocket通信，其主要特性包括：
+im-server 1.0.2底层使用netty框架做socket通信，其主要特性包括：
 
  + NIO支持更大连接数
  + Redis缓存数据提高响应速度
  + 点对点即时通信
+ + 支持群聊消息发送
  + 消息推送功能
  + 历史消息自定义sql存储
  + 用户信息多表支持及自定义sql获取用户信息
@@ -26,7 +27,7 @@ im-server 1.0.1底层使用netty框架做websocket通信，其主要特性包括
 
 #scocket 监听端口
 im.server.port=7272 
-#不要动
+#可以同时多少端登录聊天
 #im.client.num=3
 #这是redis配置用缓存已经从数据库中取到的数据 开启redis可以提高响应速度
 im.redis.host=192.168.3.201
@@ -39,22 +40,24 @@ im.redis.default.db=1
 #数据存放在redis个的集合名称
 im.redis.user.cache.table=im:users
 #jdbc连接数据库的配置 
-jdbc.host=jdbc:mysql://localhost:3306/yangkun?characterEncoding=utf8&useSSL=false
+im.jdbc.host=jdbc:mysql://localhost:3306/yangkun?characterEncoding=utf8&useSSL=false
 #数据库用户名
-jdbc.username=root
+im.jdbc.username=root
 #数据库密码
-jdbc.password=
+im.jdbc.password=
 #jdbc驱动
-jdbc.driver=com.mysql.cj.jdbc.Driver
-#如果是一个表来保存所有平台用户的话请 jdbc.s.user.info.sql 
-#和 jdbc.t.user.info.sql 配置一样就行 jdbc.s.user.info.sql
-#与jdbc.t.user.info.sql 设计为了后台用户与前台用户通信用的
-jdbc.s.user.info.sql=SELECT id,user_name as username,head_img as face FROM hd_user WHERE id = %s
-jdbc.t.user.info.sql=SELECT mid as id ,name as username,head_img as face FROM hd_analyst WHERE mid = %s
+im.jdbc.driver=com.mysql.cj.jdbc.Driver
+#如果是一个表来保存所有平台用户的话请 im.jdbc.s.user.info.sql 
+#和 im.jdbc.t.user.info.sql 配置一样就行 im.jdbc.s.user.info.sql
+#与im.jdbc.t.user.info.sql 设计为了后台用户与前台用户通信用的
+im.jdbc.s.user.info.sql=SELECT id,user_name as username,head_img as face FROM hd_user WHERE id = %s
+im.jdbc.t.user.info.sql=SELECT mid as id ,name as username,head_img as face FROM hd_analyst WHERE mid = %s
 #发送的消息保存到数据库中的sql
-jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
+im.jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
   (`user_name`,`uid`,`touid`,`touname`,`room_id`,`content`,`type`,`stype`,`inputtime`,`role`,`head_img`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
-  
+#群聊时用户与其所在房间关联表
+im.jdbc.room.sql=SELECT id,room_id as roomId,uid as userId,role FROM hd_room_user WHERE id = %s
+
   ```
  
 ### step 2
@@ -72,9 +75,9 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 `uid` 当前用户id <br>
 `touid`接收者用户id <br>
 `role`当前用户角色 s=>普通用户,t=>后台用户，如果一个表存放所有用户的话就固定s<br>
-`type` 消息类型 [login|say|logout]
+`type` 消息类型 [login|say|logout|group]
 
->2发送实时消息
+>2发送点对点实时消息
 ```json
     {
     "uid":"1474",
@@ -89,10 +92,23 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 `touid`接收者用户id <br>
 `role`当前用户角色 s=>普通用户,t=>后台用户，如果一个表存放所有用户的话就固定s<br>
 `content` 发送的内容<br>
-`type` 消息类型 [login|say|logout]
+`type` 消息类型 [login|say|logout|group]
 `stype` 此参数保留，im-server不进行逻辑参与，可以随便给值
 
->3退出时发送消息
+>3发送实时群聊消息
+```json
+    {
+    "uid":"1474",
+    "role":"s",
+    "type":"group",
+    "content":"hello",
+    "stype":"0"
+    }
+```
+`uid` 当前用户id <br>
+`role`当前用户角色 s=>普通用户,t=>后台用户，如果一个表存放所有用户的话就固定s<br>
+`type` 消息类型 [login|say|logout|group]
+>4退出时发送消息
 ```json
 {
     "uid":"1474", 
@@ -104,7 +120,7 @@ jdbc.inser.msg.record.sql=INSERT INTO `hd_im_messages` \
 `uid` 当前用户id <br>
 `touid`接收者用户id <br>
 `role`当前用户角色 s=>普通用户,t=>后台用户，如果一个表存放所有用户的话就固定s<br>
-`type` 消息类型 [login|say|logout]
+`type` 消息类型 [login|say|logout|group]
 
 >4接收到的消息体
 ```json

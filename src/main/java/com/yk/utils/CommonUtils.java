@@ -1,6 +1,5 @@
 package com.yk.utils;
 
-import com.yk.entities.Message;
 import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
@@ -15,14 +14,19 @@ public class CommonUtils {
 
     private static Logger logger = Logger.getLogger(CommonUtils.class);
 
-    public static String getUserChannelUK(Message m) {
-        return md5(m.getRole() + "_" + m.getUid());
-    }
-
-    public static String getToUserChannelUK(Message m) {
+    /**
+     * [描述： desc]
+     * @author yangkun[Email:vectormail@163.com] 2018/7/2
+     * @param role m.getRole()
+     * @param uid m.getUid()
+     * @param from boolean
+     * @return
+     */
+    public static String getKey(int uid, String role,boolean from) {
+        if (from) return md5(role + "_" + uid);
         String prefix = "s_";
-        if (m.getRole().toLowerCase().equals("s")) prefix = "t_";
-        return md5(prefix + m.getTouid());
+        if (role.toLowerCase().equals("s")) prefix = "t_";
+        return md5(prefix + uid);
     }
 
     public static String htmlspecialchars(String s) {

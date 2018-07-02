@@ -1,7 +1,6 @@
 package com.yk.servers;
 
 import com.yk.entities.Message;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.group.ChannelGroup;
 
@@ -11,12 +10,6 @@ import io.netty.channel.group.ChannelGroup;
  * @author yangkun[Email:vectormail@163.com] 2018/5/29
  */
 public interface ChannelServer {
-    void roomJoin(ChannelHandlerContext ctx, Message m);
-
-    Channel getRoomChannel(Message m);
-
-    Channel roomChannel(ChannelHandlerContext ctx, Message m);
-
     void roomDelete(Message m);
 
     /**

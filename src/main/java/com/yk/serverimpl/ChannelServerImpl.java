@@ -20,34 +20,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author yangkun[Email:vectormail@163.com] 2018/7/2
  */
 public class ChannelServerImpl implements ChannelServer {
-    private static Logger                    logger   = Logger.getLogger(ChannelServer.class);
-    private static Map<String, ChannelGroup> ucMap    = new ConcurrentHashMap<>();
-    private static Map<String, Channel>      roomcMap = new ConcurrentHashMap<>();
+    private static Logger                    logger = Logger.getLogger(ChannelServer.class);
+    private static Map<String, ChannelGroup> ucMap  = new ConcurrentHashMap<>();
 
     @Override
-    public void roomJoin(ChannelHandlerContext ctx, Message m) {
-        roomcMap.put(CommonUtils.md5(m.getRoom_id()), ctx.channel());
-    }
-
-    @Override
-    public Channel getRoomChannel(Message m) {
-        return roomcMap.get(CommonUtils.md5(m.getRoom_id()));
-    }
-
-    @Override
-    public Channel roomChannel(ChannelHandlerContext ctx, Message m) {
-        Channel c;
-        c = getRoomChannel(m);
-        if (null == c) roomJoin(ctx, m);
-        c = getRoomChannel(m);
-        return c;
-
-    }
-
-    @Override
-    public void roomDelete(Message m) {
-        roomcMap.remove(CommonUtils.md5(m.getRoom_id()));
-    }
+    public void roomDelete(Message m) { }
 
     /**
      * [描述： add  channel relation with user to channelGroup when login]
@@ -59,7 +36,6 @@ public class ChannelServerImpl implements ChannelServer {
     @Override
     public void userJoin(ChannelHandlerContext ctx, Message m) {
         String key = CommonUtils.getKey(m.getUid(), m.getRole(), true);
-        ;
         ChannelGroup cg = ucMap.get(key);
         int          s  = Integer.valueOf(ImServer.conf.getProperty("im.client.num", "3"));
         if (cg != null) {
@@ -97,11 +73,12 @@ public class ChannelServerImpl implements ChannelServer {
 
     /**
      * [描述： desc]
-     * @author yangkun[Email:vectormail@163.com] 2018/7/2
+     *
      * @param uid
      * @param role
      * @param from
      * @return
+     * @author yangkun[Email:vectormail@163.com] 2018/7/2
      */
     @Override
     public ChannelGroup getChannelGroup(int uid, String role, boolean from) {

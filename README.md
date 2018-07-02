@@ -28,7 +28,7 @@ im-server 1.0.2底层使用netty框架做socket通信，其主要特性包括：
 #scocket 监听端口
 im.server.port=7272 
 #可以同时多少端登录聊天
-#im.client.num=3
+im.client.num=3
 #这是redis配置用缓存已经从数据库中取到的数据 开启redis可以提高响应速度
 im.redis.host=192.168.3.201
 #redis端口

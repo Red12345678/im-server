@@ -38,10 +38,10 @@ public class ChannelServerImpl implements ChannelServer {
         ChannelGroup cg  = ucMap.get(key);
         int          s   = Integer.valueOf(ImServer.conf.getProperty("im.client.num", "3"));
         if (cg != null) {
-            if (cg.size() > s) {
+            if (cg.size() > s)
                 ucMap.get(key).forEach(c -> { if (!c.isActive()) ucMap.get(key).remove(c); });
-            }
-            if (ucMap.get(key).size() < s) ucMap.get(key).add(ctx.channel());
+            if (ucMap.get(key).size() < s)
+                ucMap.get(key).add(ctx.channel());
         } else {
             cg = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
             cg.add(ctx.channel());

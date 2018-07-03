@@ -48,6 +48,7 @@ public class MessageUtils {
      */
     public static void msgHandler(ChannelHandlerContext ctx, TextWebSocketFrame msg) {
         Message m = JSONObject.parseObject(msg.text(), Message.class);
+        logger.info("msgHandler => " + m);
         if (null == m) return;
         switch (m.getType().toLowerCase()) {
             case "login":

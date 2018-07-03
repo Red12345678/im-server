@@ -39,9 +39,7 @@ public class ChannelServerImpl implements ChannelServer {
         int          s   = Integer.valueOf(ImServer.conf.getProperty("im.client.num", "3"));
         if (cg != null) {
             if (cg.size() > s) {
-                ucMap.get(key).forEach(c -> {
-                    if (!c.isActive()) ucMap.get(key).remove(c);
-                });
+                ucMap.get(key).forEach(c -> { if (!c.isActive()) ucMap.get(key).remove(c); });
             }
             if (ucMap.get(key).size() < s) ucMap.get(key).add(ctx.channel());
         } else {

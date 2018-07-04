@@ -81,7 +81,8 @@ public class ChannelServerImpl implements ChannelServer {
     public ChannelGroup getChannelGroup(int uid, String role, boolean from) {
         ChannelGroup ch;
         ch = ucMap.get(CommonUtils.getKey(uid, role, from));
-        ch.forEach(c -> {if (!c.isActive()) ch.remove(c);});
+        if(null != ch)
+            ch.forEach(c -> {if (!c.isActive()) ch.remove(c);});
         logger.info("ChannelServer getchannelGroup=>" + ch);
         return ch;
     }

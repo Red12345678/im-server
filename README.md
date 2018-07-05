@@ -1,7 +1,7 @@
 Im-server 1.0.2
 ===============
 
-im-server 1.0.2底层使用netty框架做socket通信，其主要特性包括：
+im-server底层使用netty框架通信，其主要特性包括：
 
  + NIO支持更大连接数
  + Redis缓存数据提高响应速度

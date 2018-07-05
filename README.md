@@ -155,3 +155,8 @@ im.jdbc.room.sql=SELECT id,room_id as roomId,uid as userId,role FROM hd_room_use
 ![user](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189caa7b570.png)
 ![admin](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189d583a274.png)
 
+
+###  NOTE
+   有问题可以加本人QQ或微信<br>
+   QQ：1976215678 <br>
+   WX：16602112169

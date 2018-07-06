@@ -26,12 +26,11 @@ import java.util.List;
  * @author yangkun[Email:vectormail@163.com] 2018/4/16
  */
 public class MessageUtils {
-    private static Logger logger = Logger.getLogger(MessageUtils.class);
-
-    private static UserServer    us = new UserServerImpl();
-    private static MessageServer ms = new MessageServerImpl();
-    private static ChannelServer cs = new ChannelServerImpl();
-    private static RoomServer    rs = new RoomServerImpl();
+    private static Logger        logger = Logger.getLogger(MessageUtils.class);
+    private static UserServer    us     = new UserServerImpl();
+    private static MessageServer ms     = new MessageServerImpl();
+    private static ChannelServer cs     = new ChannelServerImpl();
+    private static RoomServer    rs     = new RoomServerImpl();
 
     //login
     public static void loginHander(ChannelHandlerContext ctx, Message m) {

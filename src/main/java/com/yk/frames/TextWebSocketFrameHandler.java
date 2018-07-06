@@ -30,7 +30,7 @@ public class TextWebSocketFrameHandler extends
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        logger.info("exceptionCaught" + cause.getMessage());
+        logger.info("exceptionCaught" + cause.getCause().getMessage());
         ctx.close();
     }
 

@@ -1,7 +1,7 @@
 Im-server 1.0.2
 ===============
 
-im-server 1.0.2底层使用netty框架做socket通信，其主要特性包括：
+im-server底层使用netty框架通信，其主要特性包括：
 
  + NIO支持更大连接数
  + Redis缓存数据提高响应速度
@@ -11,7 +11,7 @@ im-server 1.0.2底层使用netty框架做socket通信，其主要特性包括：
  + 历史消息自定义sql存储
  + 用户信息多表支持及自定义sql获取用户信息
 
-> im-server 1.0.1的运行环境要求jdk8以上，Maven项目管理工具。
+> im-server的运行环境要求jdk8以上，Maven项目管理工具。
 ### step 1
   此服务是java开发需要安装Jdk,Maven 并将其加入环境变量<br>
   修改本项目中conf.properties
@@ -155,3 +155,8 @@ im.jdbc.room.sql=SELECT id,room_id as roomId,uid as userId,role FROM hd_room_use
 ![user](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189caa7b570.png)
 ![admin](http://www.fang99.cc/Public/upload/article/2018/06-07/5b189d583a274.png)
 
+
+###  NOTE
+   有问题可以加本人QQ或微信<br>
+   QQ：1976215678 <br>
+   WX：16602112169

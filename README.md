@@ -101,6 +101,7 @@ im.jdbc.room.sql=SELECT id,room_id as roomId,uid as userId,role FROM hd_room_use
     "uid":"1474",
     "role":"s",
     "type":"group",
+    "room_id":"8273f9938f1cca53cb8990604023800b",
     "content":"hello",
     "stype":"0"
     }
